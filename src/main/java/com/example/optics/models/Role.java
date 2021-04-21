@@ -1,27 +1,37 @@
 package com.example.optics.models;
 
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
 
+import javax.persistence.*;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-public enum Role {
-    USER(Set.of(Permission.CUSTOMERS_READ)),
-    ADMIN(Set.of(Permission.CUSTOMERS_READ,Permission.CUSTOMERS_WRITE));
+@Setter
+@Getter
+@Entity
+@NoArgsConstructor
+@Table(name = "t_role")
+public class Role implements GrantedAuthority {
+    @Id
+    private Long id;
+    private String name;
+    @Transient
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users;
 
-    private final Set<Permission> permissions;
-
-    Role(Set<Permission> permissions) {
-        this.permissions = permissions;
+    public Role(Long id) {
+        this.id = id;
     }
 
-    public Set<Permission> getPermissions() {
-        return permissions;
+    public Role(Long id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
-    public Set<SimpleGrantedAuthority> getAuthorities() {
-        return getPermissions().stream()
-                .map(permission -> new SimpleGrantedAuthority(permission.getPermission()))
-                .collect(Collectors.toSet());
+    @Override
+    public String getAuthority() {
+        return getName();
     }
 }

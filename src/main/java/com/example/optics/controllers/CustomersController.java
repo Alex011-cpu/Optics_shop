@@ -2,41 +2,32 @@ package com.example.optics.controllers;
 
 
 import com.example.optics.models.Customer;
+import com.example.optics.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@RestController
-@RequestMapping("/customers")
+@Controller
+@RequestMapping("/customer")
 public class CustomersController {
 
-    private List<Customer> CUSTOMERS = Stream.of(
-            new Customer(1,"Alex","Tolstov"),
-            new Customer(2,"Leo","Lukyan"),
-            new Customer(3,"Jacob","Pods")
-    ).collect(Collectors.toList());
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping
-    public List<Customer> getCUSTOMERS() {
-        return CUSTOMERS;
+    public String getSuccessPage(Principal principal, Model model) {
+        model.addAttribute("UserObj",userRepository.findByEmail(principal.getName()));
+        return "customer_index";
     }
-
-    @GetMapping("/{id}")
-    public Customer getById(@PathVariable int id){
-        return CUSTOMERS.stream().filter(customer -> customer.getId() == id)
-                .findFirst().orElse(null);
-    }
-
-    @PostMapping("/add")
-    public Customer create(@RequestBody Customer customer) {
-        this.CUSTOMERS.add(customer);
-        return customer;
-    }
-
-    @DeleteMapping("/del/{id}")
-    public void deleteById(@PathVariable int id) {
-        this.CUSTOMERS.removeIf(customer -> customer.getId() == id);
+    @GetMapping("/info")
+    public String getCustomerInfo(Principal principal, Model model) {
+        model.addAttribute("UserObj",userRepository.findByEmail(principal.getName()));
+        return "personal_page";
     }
 }

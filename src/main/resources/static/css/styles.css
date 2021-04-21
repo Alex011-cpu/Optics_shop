@@ -40,6 +40,7 @@ a {
 }
 .nav1,.nav2 {
     display: flex;
+    align-items: center;
     justify-content: flex-end;
 }
 
@@ -50,3 +51,16 @@ a {
 .nav1 li ,.nav2 li{
     padding-left: 50px;
 }
+
+/*SLIDER*/
+#carouselExampleIndicators {
+    max-width: 1080px;
+    margin: 10px auto 0px auto;
+}
+
+/*cards module*/
+.card_module {
+    margin-top: 10px ;
+    display: flex;
+    justify-content: space-around;
+} 
