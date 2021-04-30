@@ -4,16 +4,17 @@
     <meta charset="UTF-8">
     <title>Магазин оптики</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet"  th:href="@{/css/styles.css}">
+    <link rel="stylesheet"  th:href="@{/css/styles.css}" href="../static/css/styles.css">
+    <link rel="stylesheet"  th:href="@{/css/customer_info.css}" href="../static/css/customer_info.css">
 </head>
 <body>
 <div class="header">
     <div class="wrapper">
         <div class="header_body">
             <ul class="nav1">
-                <span></span>
                 <li><a href="/cartProducts">0 товаров</a></li>
                 <li>
+                    <a href="/customer/info"><span style="color: white" th:text="${UserObj.firstName}"></span> <span style="color: white" th:text="${UserObj.lastName}"></span></a>
                 </li>
                 <li>
                     <a href="/customer/info">
@@ -29,7 +30,7 @@
     <div class="wrapper">
         <div class="header_body">
             <div class="logo">
-                <a href="/">МАГАЗИН ОПТИКИ</a>
+                <a href="/customer">МАГАЗИН ОПТИКИ</a>
             </div>
             <ul class="nav2">
                 <li><a href="/product/healthGlasses">МЕДИЦИНСКИЕ ОЧКИ</a></li>
@@ -40,83 +41,42 @@
     </div>
 </div>
 
+
 <div class="wrapper">
     <div class="card_module" >
-        <div class="card" th:each="product: ${productsList}" style="width: 18rem;">
-            <img class="card-img-top" src="../static/img/glasses.png" th:src="@{${product.path}}" alt="Card image cap">
+        <div class="card" th:each="basket: ${BasketList}" style="width: 18rem;">
+            <img class="card-img-top" src="../static/img/glasses.png" th:src="@{${basket.product.path}}" alt="Card image cap">
             <div class="card-body">
-                <h5 class="card-title" th:text="${product.category}"></h5>
-                <p class="card-text" th:text="${product.brandName}"></p>
-                <p class="card-text" th:text="${product.price + ' руб.'}"></p>
-                <input type="submit" th:onclick="getProductAndSend([[${product}]])" class="btn btn-primary" value="В корзину">
+                <h5 class="card-title" th:text="${basket.product.category}"></h5>
+                <p class="card-text" th:text="${basket.product.brandName}"></p>
+                <p class="card-text" th:text="${basket.product.price + ' руб.'}"></p>
+                <p class="card-text" th:text="${'Количество: '+basket.count}"></p>
+                <input type="submit" th:onclick="getProductAndSend([[${product}]])" class="btn btn-primary" value="Добавить">
+                <input type="submit" th:onclick="getProductAndSend([[${product}]])" class="btn btn-danger" value="Удалить">
             </div>
         </div>
     </div>
 </div>
+
+
+
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script th:inline="javascript">
-    /*<![CDATA[*/
-    var user = /*[[${UserObj}]]*/ null;
     var basketCount = /*[[${BasketCount}]]*/ null;
-    /*]]>*/
-    let dynamicModule = document.querySelector('body > div.header > div > div > ul > li:nth-child(3)');
-    if (user != null) {
-        document.querySelector('body > div.second_header > div > div > div > a').href='/customer';
-        dynamicModule.innerHTML='<a href="/customer/info"><span style="color: white">'+ user.firstName +
-            '</span> <span style="color: white">'+ user.lastName +'</span></a>\n';
-
-        /*POST REQUEST and adding to basket*/
-        let basket = document.querySelector("body > div.header > div > div > ul > li:nth-child(2) > a");
-        let count = 0;
-        let errorModule = document.querySelector('body > div.header > div > div > ul > span');
-        function getProductAndSend(obj) {
-            var xhr = new XMLHttpRequest();
-            var json = JSON.stringify({
-                product:
-                    {
-                        id:obj.id,
-                        category: obj.category,
-                        brandName: obj.brandName,
-                        price: obj.price,
-                        path: obj.path
-                    }
-
-            });
-            xhr.open("POST", '/product/healthGlasses', true);
-            xhr.setRequestHeader("Content-type", 'application/json; charset=utf-8');
-            xhr.send(json);
-            if (basketCount<9) {
-                basketCount++;
-                changeBasket();
-            } else {
-                errorModule.innerHTML="Вы можете добавить не более 9 товаров в корзину!";
-            }
-
-        }
-
-        function changeBasket(){
-                let lastD=basketCount % 10;
-                switch (true) {
-                    case lastD === 1:
-                        basket.innerHTML='1 товар';
-                        break;
-                    case lastD > 1 && lastD < 5:
-                        basket.innerHTML=basketCount + ' товара';
-                        break;
-                    case lastD > 4 && lastD <10:
-                        basket.innerHTML=basketCount + ' товаров';
-                }
-        }
-        changeBasket();
-    } else {
-        dynamicModule.innerHTML='<a href="/auth/login">Войти</a>';
-        document.querySelector('body > div.header > div > div > ul > li:nth-child(4)').innerHTML='' +
-            '<a href="/registration">Регистрация</a>';
+    let basket = document.querySelector("body > div.header > div > div > ul > li:nth-child(1) > a");
+    let lastD=basketCount % 10;
+    switch (true) {
+        case lastD === 1:
+            basket.innerHTML='1 товар';
+            break;
+        case lastD > 1 && lastD < 5:
+            basket.innerHTML=basketCount + ' товара';
+            break;
+        case lastD > 4 && lastD <10:
+            basket.innerHTML=basketCount + ' товаров';
     }
-
-
 </script>
 </body>
 </html>

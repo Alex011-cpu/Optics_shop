@@ -38,6 +38,10 @@ a {
     text-decoration: none;
     color: white;
 }
+
+a:hover {
+    color: white;
+}
 .nav1,.nav2 {
     display: flex;
     align-items: center;
@@ -60,7 +64,17 @@ a {
 
 /*cards module*/
 .card_module {
-    margin-top: 10px ;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
-} 
+}
+
+.card_module .card {
+    margin-top: 10px ;
+}
+
+/*error basket module*/
+body > div.header > div > div > ul > span {
+    color: #ff6d6d;
+    max-width: 201px;
+}

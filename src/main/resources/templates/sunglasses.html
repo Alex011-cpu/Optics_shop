@@ -97,17 +97,17 @@
         }
 
         function changeBasket(){
-                let lastD=basketCount % 10;
-                switch (true) {
-                    case lastD === 1:
-                        basket.innerHTML='1 товар';
-                        break;
-                    case lastD > 1 && lastD < 5:
-                        basket.innerHTML=basketCount + ' товара';
-                        break;
-                    case lastD > 4 && lastD <10:
-                        basket.innerHTML=basketCount + ' товаров';
-                }
+            let lastD=basketCount % 10;
+            switch (true) {
+                case lastD === 1:
+                    basket.innerHTML='1 товар';
+                    break;
+                case lastD > 1 && lastD < 5:
+                    basket.innerHTML=basketCount + ' товара';
+                    break;
+                case lastD > 4 && lastD <10:
+                    basket.innerHTML=basketCount + ' товаров';
+            }
         }
         changeBasket();
     } else {

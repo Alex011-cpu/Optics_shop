@@ -11,9 +11,9 @@
         <div class="wrapper">
             <div class="header_body">
                 <ul class="nav1">
-                    <li><a href="">0 товаров</a></li>
+                    <li><a href="/cartProducts">0 товаров</a></li>
                     <li>
-                        <span style="color: white" th:text="${UserObj.firstName}"></span> <span style="color: white" th:text="${UserObj.lastName}"></span>
+                        <a href="/customer/info"><span style="color: white" th:text="${UserObj.firstName}"></span> <span style="color: white" th:text="${UserObj.lastName}"></span></a>
                     </li>
                     <li>
                         <a href="/customer/info">
@@ -29,11 +29,11 @@
         <div class="wrapper">
             <div class="header_body">
                 <div class="logo">
-                    <a href="">МАГАЗИН ОПТИКИ</a>
+                    <a href="/customer">МАГАЗИН ОПТИКИ</a>
                 </div>
                 <ul class="nav2">
                     <li><a href="/product/healthGlasses">МЕДИЦИНСКИЕ ОЧКИ</a></li>
-                    <li><a href="">СОЛНЦЕЗАЩИТНЫЕ ОЧКИ</a></li>
+                    <li><a href="/product/sunglasses">СОЛНЦЕЗАЩИТНЫЕ ОЧКИ</a></li>
                     <li><a href="">КОНТАКТНЫЕ ЛИНЗЫ</a></li>
                 </ul>
             </div>
@@ -97,5 +97,20 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script th:inline="javascript">
+        var basketCount = /*[[${BasketCount}]]*/ null;
+        let basket = document.querySelector("body > div.header > div > div > ul > li:nth-child(1) > a");
+        let lastD=basketCount % 10;
+        switch (true) {
+            case lastD === 1:
+                basket.innerHTML='1 товар';
+                break;
+            case lastD > 1 && lastD < 5:
+                basket.innerHTML=basketCount + ' товара';
+                break;
+            case lastD > 4 && lastD <10:
+                basket.innerHTML=basketCount + ' товаров';
+        }
+    </script>
 </body>
 </html>

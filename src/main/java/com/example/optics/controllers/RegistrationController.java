@@ -2,6 +2,7 @@ package com.example.optics.controllers;
 
 
 import com.example.optics.models.User;
+import com.example.optics.services.BasketService;
 import com.example.optics.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,4 +44,5 @@ public class RegistrationController {
         }
         return "redirect:/";
     }
+
 }

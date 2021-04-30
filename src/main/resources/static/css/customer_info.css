@@ -1,0 +1,22 @@
+.personal_info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 61vh;
+    max-width: 362px;
+}
+
+.personal_info .avatar {
+    margin-top: 17%;
+}
+
+.surname > span:nth-child(3), .name > span:nth-child(3),
+.email > span:nth-child(3){
+    font-weight: 300;
+    font-size: 23px;
+}
+
+.surname, .name , .email {
+    margin-bottom: 23px;
+}
+
