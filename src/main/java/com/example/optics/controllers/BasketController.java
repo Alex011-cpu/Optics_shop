@@ -21,9 +21,15 @@ public class BasketController {
     private UserService userService;
 
     @ResponseBody
-    @PostMapping("/product/healthGlasses")
+    @PostMapping("/product/addInBasket")
     public void addToBasket(@RequestBody Basket basket) {
         basketService.addProduct(basket);
+    }
+
+    @ResponseBody
+    @DeleteMapping("/product/delete")
+    public void deleteFromBasket(@RequestBody Basket basket) {
+        basketService.delProduct(basket);
     }
 
     @GetMapping("/cartProducts")
@@ -33,6 +39,7 @@ public class BasketController {
         else {
             model.addAttribute("UserObj", userService.loadUserByUsername(principal.getName()));
             model.addAttribute("BasketList",basketService.findAll());
+            model.addAttribute("SumOfOrder",basketService.sumOfOrder());
         }
         return "shopping_cart";
     }

@@ -84,7 +84,7 @@
                     }
 
             });
-            xhr.open("POST", '/product/healthGlasses', true);
+            xhr.open("POST", '/product/addInBasket', true);
             xhr.setRequestHeader("Content-type", 'application/json; charset=utf-8');
             xhr.send(json);
             if (basketCount<9) {
@@ -105,7 +105,7 @@
                 case lastD > 1 && lastD < 5:
                     basket.innerHTML=basketCount + ' товара';
                     break;
-                case lastD > 4 && lastD <10:
+                case (lastD > 4 && lastD <10):
                     basket.innerHTML=basketCount + ' товаров';
             }
         }

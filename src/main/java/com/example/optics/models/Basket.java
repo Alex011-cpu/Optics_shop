@@ -20,4 +20,6 @@ public class Basket {
     Product product;
     @Column(name = "count")
     int count;
+    @Column(name = "sum")
+    int sum;
 }

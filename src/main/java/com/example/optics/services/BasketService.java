@@ -25,6 +25,7 @@ public class BasketService {
             if (basketFromDb.getCount() >= 1 && countOfOrder()<9) {
                 basketFromDb.setProduct(basket.getProduct());
                 basketFromDb.setCount(basketFromDb.getCount() + 1);
+                basketFromDb.setSum(basket.getProduct().getPrice() * basketFromDb.getCount());
                 basketRepository.save(basketFromDb);
             }
         }else if (countOfOrder() > 9) {
@@ -32,7 +33,23 @@ public class BasketService {
         }
         else if (countOfOrder() < 9) {
             basket.setCount(1);
+            basket.setSum(basket.getProduct().getPrice());
             basketRepository.save(basket);
+        }
+        return true;
+    }
+
+    public boolean delProduct(Basket basket) {
+        if (basketRepository.findByProduct_Id(basket.getProduct().getId()).isPresent()) {
+            Basket basketFromDb = basketRepository.findByProduct_Id(basket.getProduct().getId()).get();
+            if (basketFromDb.getCount() > 1) {
+                basketFromDb.setProduct(basket.getProduct());
+                basketFromDb.setCount(basketFromDb.getCount() - 1);
+                basketFromDb.setSum(basketFromDb.getSum() - basket.getProduct().getPrice());
+                basketRepository.save(basketFromDb);
+            } else if (basketFromDb.getCount() == 1) {
+                basketRepository.delete(basketFromDb);
+            }
         }
         return true;
     }
@@ -50,6 +67,10 @@ public class BasketService {
     }
 
     public int countOfOrder() {
+        return basketRepository.allCount().orElse(0);
+    }
+
+    public int sumOfOrder() {
         return basketRepository.sum().orElse(0);
     }
 

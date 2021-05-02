@@ -5,13 +5,14 @@
     <title>Магазин оптики</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet"  th:href="@{/css/styles.css}" href="../static/css/styles.css">
-    <link rel="stylesheet"  th:href="@{/css/customer_info.css}" href="../static/css/customer_info.css">
+    <link rel="stylesheet"  th:href="@{/css/shopping_cart.css}" href="../static/css/shopping_cart.css">
 </head>
 <body>
 <div class="header">
     <div class="wrapper">
         <div class="header_body">
             <ul class="nav1">
+                <span></span>
                 <li><a href="/cartProducts">0 товаров</a></li>
                 <li>
                     <a href="/customer/info"><span style="color: white" th:text="${UserObj.firstName}"></span> <span style="color: white" th:text="${UserObj.lastName}"></span></a>
@@ -43,40 +44,122 @@
 
 
 <div class="wrapper">
-    <div class="card_module" >
-        <div class="card" th:each="basket: ${BasketList}" style="width: 18rem;">
-            <img class="card-img-top" src="../static/img/glasses.png" th:src="@{${basket.product.path}}" alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title" th:text="${basket.product.category}"></h5>
-                <p class="card-text" th:text="${basket.product.brandName}"></p>
-                <p class="card-text" th:text="${basket.product.price + ' руб.'}"></p>
-                <p class="card-text" th:text="${'Количество: '+basket.count}"></p>
-                <input type="submit" th:onclick="getProductAndSend([[${product}]])" class="btn btn-primary" value="Добавить">
-                <input type="submit" th:onclick="getProductAndSend([[${product}]])" class="btn btn-danger" value="Удалить">
-            </div>
+    <div class="top_panel">
+        <h1>Корзина</h1>
+        <div class="sub_panel">
+            <span th:text="${'Итого: '+SumOfOrder + ' руб.'}"></span>
+            <a href="">Оформить заказ</a>
         </div>
     </div>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Наименование</th>
+            <th scope="col"> </th>
+            <th scope="col"> </th>
+            <th scope="col">Цена</th>
+            <th scope="col">Количество</th>
+            <th scope="col">Сумма</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="basket: ${BasketList}">
+            <th scope="row"><img src="../static/img/glasses.png" th:src="@{${basket.product.path}}" alt="Card image cap" style="max-width: 200px "></th>
+            <td th:text="${basket.product.category}"></td>
+            <td th:text="${basket.product.brandName}"></td>
+            <td th:text="${basket.product.price + ' руб.'}"></td>
+            <td>
+                <div class="basket_count">
+                    <span class="minus" th:onclick="getProductAndSend([[${basket.product}]],null, this)"></span>
+                    <span id="cnt" th:text="${basket.count}"></span>
+                    <span class="plus" th:onclick="getProductAndSend([[${basket.product}]],this, null)"></span>
+                </div>
+            </td>
+            <td th:text="${basket.sum + ' руб.'}"></td>
+        </tr>
+        </tbody>
+    </table>
 </div>
-
-
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script th:inline="javascript">
+    /*<![CDATA[*/
     var basketCount = /*[[${BasketCount}]]*/ null;
-    let basket = document.querySelector("body > div.header > div > div > ul > li:nth-child(1) > a");
-    let lastD=basketCount % 10;
-    switch (true) {
-        case lastD === 1:
-            basket.innerHTML='1 товар';
-            break;
-        case lastD > 1 && lastD < 5:
-            basket.innerHTML=basketCount + ' товара';
-            break;
-        case lastD > 4 && lastD <10:
-            basket.innerHTML=basketCount + ' товаров';
-    }
+    /*]]>*/
+
+        /*POST REQUEST and adding to basket*/
+        /*And DELETE REQUEST and deleting product in basket*/
+        let basket = document.querySelector("body > div.header > div > div > ul > li:nth-child(2) > a");
+        let count = 0;
+        let errorModule = document.querySelector('body > div.header > div > div > ul > span');
+        function getProductAndSend(obj, plus, minus) {
+            var xhr = new XMLHttpRequest();
+            var json = JSON.stringify({
+                product:
+                    {
+                        id:obj.id,
+                        category: obj.category,
+                        brandName: obj.brandName,
+                        price: obj.price,
+                        path: obj.path
+                    }
+
+            });
+
+            let currentSumOfOrder = parseInt(document.querySelector("body > div.wrapper > div > div > span").
+            innerText.replace('Итого:','').replace('руб.',''));
+
+            if (plus!=null) {
+                xhr.open("POST", '/product/addInBasket', true);
+                xhr.setRequestHeader("Content-type", 'application/json; charset=utf-8');
+                xhr.send(json);
+                if (basketCount<9) {
+                    basketCount++;
+                    plus.previousElementSibling.innerText = parseInt(plus.previousElementSibling.innerText) + 1;
+                    plus.parentElement.parentElement.nextElementSibling.innerText = parseInt(plus.parentElement.parentElement
+                        .nextElementSibling.innerText.replace(' руб ','')) + obj.price + ' руб ';
+                    document.querySelector("body > div.wrapper > div > div > span").innerText = 'Итого: '+ (currentSumOfOrder + obj.price)
+                    + ' руб.';
+                    changeBasket();
+                } else {
+                    errorModule.innerHTML="Вы можете добавить не более 9 товаров в корзину!";
+                }
+            } else if (minus!=null) {
+                xhr.open("DELETE", '/product/delete', true);
+                xhr.setRequestHeader("Content-type", 'application/json; charset=utf-8');
+                xhr.send(json);
+                if (basketCount>0) {
+                    if (errorModule.innerHTML!=null) errorModule.innerHTML="";
+                    if (parseInt(minus.nextElementSibling.innerText)===1) minus.parentElement.parentElement.parentElement.remove();
+                    basketCount--;
+                    minus.nextElementSibling.innerText = parseInt(minus.nextElementSibling.innerText) - 1;
+                    minus.parentElement.parentElement.nextElementSibling.innerHTML = (parseInt(minus.parentElement.parentElement
+                        .nextElementSibling.innerText.replace(' руб ','')) - obj.price) + 'руб ';
+                    document.querySelector("body > div.wrapper > div > div > span").innerText = 'Итого: '+ (currentSumOfOrder - obj.price)
+                    + ' руб.';
+                    changeBasket();
+                }
+            }
+
+        }
+
+        function changeBasket(){
+            let lastD=basketCount % 10;
+            switch (true) {
+                case lastD === 1:
+                    basket.innerHTML='1 товар';
+                    break;
+                case lastD > 1 && lastD < 5:
+                    basket.innerHTML=basketCount + ' товара';
+                    break;
+                case (lastD > 4 && lastD <10)||lastD===0:
+                    basket.innerHTML=basketCount + ' товаров';
+            }
+        }
+        changeBasket();
+
 </script>
 </body>
 </html>

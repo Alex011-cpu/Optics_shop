@@ -13,7 +13,11 @@ import java.util.Optional;
 public interface BasketRepository extends JpaRepository<Basket, Long> {
 
     Optional<Basket> findByProduct_Id(Long id);
+
     @Query("SELECT SUM (m.count) from Basket m")
+    Optional<Integer> allCount();
+
+    @Query("SELECT SUM (m.sum) from Basket m")
     Optional<Integer> sum();
 
     @Override
