@@ -29,6 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").permitAll()
                 .antMatchers("/product/**").permitAll()
                 .antMatchers("/registration").not().authenticated()
+                .antMatchers("/fontawesome-free/**").permitAll()
                 .antMatchers("/css/**").permitAll()
                 .antMatchers("/img/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/customers/**").hasAnyRole("ADMIN","USER")
@@ -39,7 +40,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/auth/login").permitAll()
-                .defaultSuccessUrl("/customer",true);
+                .failureUrl("/auth/loginError")
+                .defaultSuccessUrl("/customer",true)
+                .and()
+                .rememberMe().key("topSecret");
+
     }
 
     @Bean

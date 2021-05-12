@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Магазин оптики</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/fontawesome-free/css/all.css}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet"  th:href="@{/css/styles.css}" href="../static/css/styles.css">
     <link rel="stylesheet"  th:href="@{/css/customer_info.css}" href="../static/css/customer_info.css">
@@ -35,37 +37,86 @@
             <ul class="nav2">
                 <li><a href="/product/healthGlasses">МЕДИЦИНСКИЕ ОЧКИ</a></li>
                 <li><a href="/product/sunglasses">СОЛНЦЕЗАЩИТНЫЕ ОЧКИ</a></li>
-                <li><a href="">КОНТАКТНЫЕ ЛИНЗЫ</a></li>
+                <li><a href="/product/contactLenses">КОНТАКТНЫЕ ЛИНЗЫ</a></li>
             </ul>
         </div>
     </div>
 </div>
 
+
 <div class="wrapper">
-    <div class="personal_info">
-        <div class="avatar">
-            <img src="../static/img/avatar.png" th:src="@{/img/avatar.png}"alt="avatar">
+    <div class="main_info">
+        <div class="personal_info">
+            <div class="avatar">
+                <img src="../static/img/avatar.png" th:src="@{/img/avatar.png}"alt="avatar">
+            </div>
+            <div class="about_user">
+                <div class="surname">
+                    <span style="color: #0092D4">Фамилия</span><br>
+                    <span th:text="${UserObj.lastName}"></span>
+                </div>
+                <div class="name">
+                    <span style="color: #0092D4">Имя</span><br>
+                    <span th:text="${UserObj.firstName}"></span>
+                </div>
+                <div class="email">
+                    <span style="color: #0092D4">Почта</span><br>
+                    <span th:text="${UserObj.email}"></span>
+                </div>
+            </div>
+            <form th:action="@{/auth/logout}" method="get">
+                <button type="submit" class="btn btn-primary">Выйти</button>
+            </form>
         </div>
-        <div class="about_user">
-            <div class="surname">
-                <span style="color: #0092D4">Фамилия</span><br>
-                <span th:text="${UserObj.lastName}"></span>
-            </div>
-            <div class="name">
-                <span style="color: #0092D4">Имя</span><br>
-                <span th:text="${UserObj.firstName}"></span>
-            </div>
-            <div class="email">
-                <span style="color: #0092D4">Почта</span><br>
-                <span th:text="${UserObj.email}"></span>
-            </div>
+        <div class="history_info">
+                <h1>История покупок</h1>
+                <table class="table table-hover" style="overflow-y:scroll">
+                    <thead>
+                    <tr>
+                        <th scope="col">Наименование</th>
+                        <th scope="col"> </th>
+                        <th scope="col">Цена</th>
+                        <th scope="col">Количество</th>
+                        <th scope="col">Сумма</th>
+                        <th scope="col">Дата</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="history: ${HistoryList}">
+                        <th scope="row" th:text="${history.product.category}"></th>
+                        <td th:text="${history.product.brandName}"></td>
+                        <td th:text="${history.product.price + ' руб.'}"></td>
+                        <td th:text="${history.count}"></td>
+                        <td th:text="${history.sum + ' руб.'}"></td>
+                        <td th:text="${history.creationDate}"></td>
+                    </tr>
+                    </tbody>
+                </table>
         </div>
-        <form th:action="@{/auth/logout}" method="get">
-            <button type="submit" class="btn btn-primary">Logout</button>
-        </form>
     </div>
 </div>
-
+<div class="footer">
+    <div class="wrapper">
+        <div class="contact">
+            <p>Связаться</p>
+            <div class="number">
+                <p>+7(966)111-11-11</p>
+            </div>
+            <div class="mail">
+                <p>floppa@mail.ru</p>
+            </div>
+        </div>
+        <div class="social">
+            <p>Социальные сети</p>
+            <div class="social-icons">
+                <a href=""><i class="fab fa-1x fa-vk"></i></a>
+                <a href="#"><i class="fab fa-1x fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-1x fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

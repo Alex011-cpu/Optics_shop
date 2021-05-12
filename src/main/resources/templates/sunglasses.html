@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Магазин оптики</title>
+    <link rel="stylesheet" th:href="@{/fontawesome-free/css/all.css}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet"  th:href="@{/css/styles.css}">
 </head>
@@ -34,13 +35,29 @@
             <ul class="nav2">
                 <li><a href="/product/healthGlasses">МЕДИЦИНСКИЕ ОЧКИ</a></li>
                 <li><a href="/product/sunglasses">СОЛНЦЕЗАЩИТНЫЕ ОЧКИ</a></li>
-                <li><a href="">КОНТАКТНЫЕ ЛИНЗЫ</a></li>
+                <li><a href="/product/contactLenses">КОНТАКТНЫЕ ЛИНЗЫ</a></li>
             </ul>
         </div>
     </div>
 </div>
 
 <div class="wrapper">
+    <div class="breadcrumbs">
+        <a href="/" class="breadcrumbs_link">Интернет-магазин оптики</a>
+        <span class="breadcrumbs_sep">/</span>
+        <span class="breadcrumbs_text">Солнцезащитные очки</span>
+    </div>
+    <div class="category_name">
+        <h1>Солнцезащитные очки</h1>
+    </div>
+    <div class="filter_module">
+        <span th:text="${'Найдено ' + CountByCategory + ' предложений'}"></span>
+        <div class="sort_module">
+            <span>Сортировка по:</span>
+            <a href="/product/sunglasses/sort-price-asc" class="sort_price">Цене</a>
+            <a href="/product/sunglasses/sort-brand-asc" class="sort_brand">Бренду</a>
+        </div>
+    </div>
     <div class="card_module" >
         <div class="card" th:each="product: ${productsList}" style="width: 18rem;">
             <img class="card-img-top" src="../static/img/glasses.png" th:src="@{${product.path}}" alt="Card image cap">
@@ -49,6 +66,28 @@
                 <p class="card-text" th:text="${product.brandName}"></p>
                 <p class="card-text" th:text="${product.price + ' руб.'}"></p>
                 <input type="submit" th:onclick="getProductAndSend([[${product}]])" class="btn btn-primary" value="В корзину">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="footer">
+    <div class="wrapper">
+        <div class="contact">
+            <p>Связаться</p>
+            <div class="number">
+                <p>+7(966)111-11-11</p>
+            </div>
+            <div class="mail">
+                <p>floppa@mail.ru</p>
+            </div>
+        </div>
+        <div class="social">
+            <p>Социальные сети</p>
+            <div class="social-icons">
+                <a href=""><i class="fab fa-1x fa-vk"></i></a>
+                <a href="#"><i class="fab fa-1x fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-1x fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
             </div>
         </div>
     </div>
@@ -114,9 +153,37 @@
         dynamicModule.innerHTML='<a href="/auth/login">Войти</a>';
         document.querySelector('body > div.header > div > div > ul > li:nth-child(4)').innerHTML='' +
             '<a href="/registration">Регистрация</a>';
+        function getProductAndSend(obj) {
+            window.location.href = "/auth/login";
+        }
     }
 
+    /*filter module*/
+    let sortByPriceLink = document.querySelector('a.sort_price');
+    let sortByBrandLink = document.querySelector('a.sort_brand');
 
+    function setHrefAscAndClass() {
+        sortByPriceLink.href = '/product/sunglasses/sort-price-asc';
+        sortByBrandLink.href = '/product/sunglasses/sort-brand-asc';
+        sortByPriceLink.classList.remove('clicked');
+        sortByBrandLink.classList.remove('clicked');
+    }
+
+    function setHrefDescAndClass() {
+        sortByPriceLink.href = '/product/sunglasses/sort-price-desc';
+        sortByBrandLink.href = '/product/sunglasses/sort-brand-desc';
+        sortByPriceLink.classList.add('clicked');
+        sortByBrandLink.classList.add('clicked');
+    }
+    if (window.location.href.substring(window.location.href.lastIndexOf('/'))==='/sort-price-desc') {
+        setHrefAscAndClass();
+    } else if (window.location.href.substring(window.location.href.lastIndexOf('/'))==='/sort-price-asc') {
+        setHrefDescAndClass();
+    } else if (window.location.href.substring(window.location.href.lastIndexOf('/'))==='/sort-brand-desc') {
+        setHrefAscAndClass();
+    } else if (window.location.href.substring(window.location.href.lastIndexOf('/'))==='/sort-brand-asc') {
+        setHrefDescAndClass();
+    }
 </script>
 </body>
 </html>

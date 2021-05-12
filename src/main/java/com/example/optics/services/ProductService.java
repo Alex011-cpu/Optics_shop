@@ -4,6 +4,7 @@ package com.example.optics.services;
 import com.example.optics.models.Product;
 import com.example.optics.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,4 +38,35 @@ public class ProductService {
     public List<Product> allProductsByCategory(String category) {
         return productRepository.findAllByCategory(category);
     }
+
+    public List<Product> allProductsByCategoryAndSortedByPriceDesc(String category) {
+        return productRepository.findAllByCategory(category, Sort.by(Sort.Direction.DESC,"price"));
+    }
+
+    public List<Product> allProductsByCategoryAndSortedByPriceAsc(String category) {
+        return productRepository.findAllByCategory(category, Sort.by(Sort.Direction.ASC,"price"));
+    }
+
+    public List<Product> allProductsByCategoryAndSortedByBrandDesc(String category) {
+        return productRepository.findAllByCategory(category, Sort.by(Sort.Direction.DESC,"brandName"));
+    }
+
+    public List<Product> allProductsByCategoryAndSortedByBrandAsc(String category) {
+        return productRepository.findAllByCategory(category, Sort.by(Sort.Direction.ASC,"brandName"));
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

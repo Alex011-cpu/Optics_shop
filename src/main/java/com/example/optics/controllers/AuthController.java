@@ -10,12 +10,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
@@ -27,7 +25,13 @@ public class AuthController {
     private BasketService basketService;
 
     @GetMapping("/auth/login")
-    public String getLoginPage() {
+    public String getLoginPage(Model model) {
+        return "login";
+    }
+
+    @GetMapping("/auth/loginError")
+    public String getLoginPageWithError(Model model) {
+        model.addAttribute("errorMessage","Неправильная почта или пароль");
         return "login";
     }
 
@@ -35,6 +39,20 @@ public class AuthController {
     public String logoutFromAc(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
+            Cookie cookie = null;
+            for (Cookie c:request.getCookies()) {
+                /*Удаление куки*/
+                if (c.getName().equals("remember-me")) {
+                    c.setMaxAge(0);
+                    c.setPath("/");
+                    response.addCookie(c);
+                }
+                if (c.getName().equals("JSESSIONID")) {
+                    c.setMaxAge(0);
+                    c.setPath("/");
+                    response.addCookie(c);
+                }
+            }
             basketService.deleteAll();
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }

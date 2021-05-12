@@ -20,3 +20,14 @@
     margin-bottom: 23px;
 }
 
+.main_info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.history_info {
+    margin-top: 34px;
+    max-width: 66%;
+    height: 57vh;
+    overflow: scroll;
+}

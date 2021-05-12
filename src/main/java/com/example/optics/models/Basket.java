@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,6 +18,7 @@ public class Basket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
     @OneToOne
+    @JoinColumn(name = "product_id")
     Product product;
     @Column(name = "count")
     int count;

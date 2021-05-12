@@ -12,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -23,7 +24,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Pattern(regexp = "^(.+)@(.+)$", message = "Адрес электронной почты введен неправильно")
+    @Pattern(regexp = "^(.+)@(.+)$", message = "Неверный адрес электронной почты")
     private String email;
     @Size(min = 4, message = "Введите не меньше 3 знаков")
     private String firstName;

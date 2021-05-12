@@ -33,6 +33,10 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
     public boolean saveUser(User user) {
         User userDb = userRepository.findByEmail(user.getEmail());
 

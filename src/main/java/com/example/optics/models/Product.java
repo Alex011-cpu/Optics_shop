@@ -17,7 +17,5 @@ public class Product {
     private String brandName;
     private int price;
     private String path;
-    @OneToOne
-    @Transient
-    private Basket basket;
+
 }

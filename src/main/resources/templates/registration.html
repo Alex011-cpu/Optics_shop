@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Регистрация</title>
     <style>
         * {
@@ -13,42 +13,48 @@
         .error_module {
             display: none;
             padding: 25px 30px;
-            width: 300px;
+            width: 85%;
             background-color: red;
             border-radius: 10px/10px;
             color: white;
             text-align: center;
             transition: all 0.4s ;
+            margin: 0 auto;
+            opacity: .4;
         }
     </style>
-
+    <link rel="stylesheet" th:href="@{/css/login.css}" href="../static/css/login.css">
 </head>
 
 <body>
-<div>
-    <form th:action="@{registration}" th:object="${UserForm}" method="post">
-        <h2>Регистрация</h2>
-        <div class="error_module">
-            <span th:text="${errorMessage}"></span>
-        </div>
-        <p>email:<input type="text" th:field="*{email}" />
+<div class="wrapper fadeInDown">
+    <div id="formContent">
+
+        <a href="/auth/login"><h2 class="inactive underlineHover"> Войти </h2></a>
+        <a href="/registration"><h2 class="active">Зарегистрироваться </h2></a>
+
+        <form th:action="@{registration}" th:object="${UserForm}" method="post">
+            <div class="error_module">
+                <span th:text="${errorMessage}"></span>
+            </div>
+            <input type="text" th:field="*{email}" id="login" name="username" placeholder="Почта">
             <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" th:errorclass="error"></span>
-        </p>
-        <p>name: <input type="text" th:field="*{firstName}" /></p>
+            <input type="text" th:field="*{firstName}" placeholder="Имя" />
             <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" th:errorclass="error"></span>
-        <p>lastName: <input type="text" th:field="*{lastName}" /></p>
+            <input type="text" th:field="*{lastName}" placeholder="Фамилия" />
             <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" th:errorclass="error"></span>
-        <p>password: <input type="password" th:field="*{password}" /></p>
+            <input type="password" th:field="*{password}" id="password" name="password" placeholder="Пароль">
             <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" th:errorclass="error"></span>
-        <p>Confirm password:</p> <input type="password" th:field="*{passwordConfirm}" /></p>
-        <p><input type="submit" value="submit" /></p>
-    </form>
+            <input type="password" th:field="*{passwordConfirm}" placeholder="Подтвердить пароль" />
+            <input type="submit" value="Зарегистрироваться">
+        </form>
+
+    </div>
 </div>
 <script>
-    let errorModule = document.querySelector('body > div > form > div');
-    if (document.querySelector('body > div > form > div > span').innerText !== "") {
+    let errorModule = document.querySelector("#formContent > form > div");
+    if (document.querySelector("#formContent > form > div > span").innerText !== "") {
         errorModule.style.display="block";
-        errorModule.style.opacity=".5";
     }
 </script>
 </body>

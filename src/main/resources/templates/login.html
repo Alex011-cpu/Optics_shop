@@ -1,23 +1,49 @@
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/login.css}" href="../static/css/login.css">
+    <style>
+        .error_module {
+            display: none;
+            padding: 25px 30px;
+            width: 85%;
+            background-color: red;
+            border-radius: 10px/10px;
+            color: white;
+            text-align: center;
+            transition: all 0.4s ;
+            margin: 0 auto;
+            opacity: .4;
+        }
+    </style>
 </head>
 <body>
-<h1>Login</h1>
-<form name='f' action="/auth/login"  method='POST'>
-    <table>
-        <tr>
-            <td>User:</td>
-            <td><input type='text'  name='username' value=''></td>
-        </tr>
-        <tr>
-            <td>Password:</td>
-            <td><input type='password' name='password' /></td>
-        </tr>
-        <tr>
-            <td><input name="submit" type="submit"/></td>
-        </tr>
-    </table>
-</form>
+<div class="wrapper fadeInDown">
+    <div id="formContent">
+
+        <a href="/auth/login"><h2 class="active"> Войти </h2></a>
+        <a href="/registration"><h2 class="inactive underlineHover">Зарегистрироваться </h2></a>
+
+        <form name='f' action="/auth/login"  method='POST'>
+            <div class="error_module">
+                <span th:text="${errorMessage}"></span>
+            </div>
+            <input type="text" id="login" name="username" placeholder="Почта">
+            <input type="password" id="password" name="password" placeholder="Пароль">
+            <div class="rem">
+                <input type="checkbox" id="remember" name="remember-me"> <label for="remember">Запомнить</label>
+            </div>
+            <input type="submit" value="Войти">
+        </form>
+
+    </div>
+</div>
+<script>
+    let errorModule = document.querySelector("#formContent > form > div.error_module");
+    if (document.querySelector("#formContent > form > div.error_module > span").innerText !== "") {
+        errorModule.style.display="block";
+    }
+</script>
 </body>
 </html>
