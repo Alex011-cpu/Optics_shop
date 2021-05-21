@@ -9,6 +9,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Репозиторий для корзины
+ */
 @Repository
 public interface BasketRepository extends JpaRepository<Basket, Long> {
 

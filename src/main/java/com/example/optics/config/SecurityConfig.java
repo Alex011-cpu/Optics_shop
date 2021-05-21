@@ -13,6 +13,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+/**
+ * Класс для конфигурации Spring Security
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -20,6 +23,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserService userService;
 
+    /**
+     * Метод для конфигурации (разрешения для определенных ролей, включение функции запомнить меня и т.д.)
+     * @param http
+     * @throws Exception
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -47,11 +55,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
+    /**
+     * Метод для шифрофания пароля
+     * @return объект класса BCryptPasswordEncoder
+     */
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Метод для установки пользовательского сервиса и метода шифрования пароля
+     * @param auth
+     * @throws Exception
+     */
     @Autowired
     protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder());

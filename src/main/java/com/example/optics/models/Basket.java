@@ -8,6 +8,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * Класс-сущность для корзины
+ */
 @Getter
 @Setter
 @Entity

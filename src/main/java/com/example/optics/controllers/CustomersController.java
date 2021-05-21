@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
+/**
+ * Класс-контроллер для страницы личного кабинета и др.
+ */
 @Controller
 public class CustomersController {
 
@@ -23,12 +26,23 @@ public class CustomersController {
     @Autowired
     private HistoryOfOrdersService historyOfOrdersService;
 
+    /**
+     *
+     * @param principal
+     * @return наименование html страницы String
+     */
     @GetMapping("/")
     public String redirectToCustomer(Principal principal) {
         if (principal!= null) return "redirect:/customer";
         return "index";
     }
 
+    /**
+     * GET-запрос для страницы после входа в систему
+     * @param principal
+     * @param model
+     * @return наименование html страницы String
+     */
     @GetMapping("/customer")
     public String getSuccessPage(Principal principal, Model model) {
         model.addAttribute("BasketCount",basketService.countOfOrder());
@@ -36,6 +50,12 @@ public class CustomersController {
         return "customer_index";
     }
 
+    /**
+     * GET-запрос для страницы личного кабинета пользователя
+     * @param principal
+     * @param model
+     * @return наименование html страницы String
+     */
     @GetMapping("customer/info")
     public String getCustomerInfo(Principal principal, Model model) {
         model.addAttribute("BasketCount",basketService.countOfOrder());

@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
 
+/**
+ * Класс-контроллер для отображения страниц с товарами
+ */
 @Controller
 @RequestMapping("/product")
 public class ProductPageController {
@@ -26,6 +29,12 @@ public class ProductPageController {
     @Autowired
     private BasketService basketService;
 
+    /**
+     * Метод для проверки: зашел пользователь в систему или нет
+     * @param model
+     * @param principal
+     * @param category
+     */
     public void checkUserAndSetModel(Model model, Principal principal, String category) {
         model.addAttribute("BasketCount", basketService.countOfOrder());
         if (principal == null) model.addAttribute("UserObj", null);
@@ -36,7 +45,13 @@ public class ProductPageController {
         model.addAttribute("CountByCategory", productService.allProductsByCategory(category).size());
     }
 
-
+    /**
+     * GET-запрос для получения страницы с товарами
+     * @param model
+     * @param principal
+     * @param categoryName
+     * @return наименование html страницы String
+     */
     @GetMapping("/{categoryName}")
     public String getProductPage(Model model, Principal principal, @PathVariable String categoryName) {
             if (categoryName.equals("healthGlasses")) {
@@ -55,6 +70,14 @@ public class ProductPageController {
             return "";
     }
 
+    /**
+     * GET-запрос для получения страницы с отсортированными товарами
+     * @param model
+     * @param principal
+     * @param categoryName
+     * @param sortMethod
+     * @return наименование html страницы String
+     */
     @GetMapping("/{categoryName}/{sortMethod}")
     public String getProductPageWithSortPriceDesc(Model model, Principal principal, @PathVariable String categoryName,
                                                   @PathVariable String sortMethod) {

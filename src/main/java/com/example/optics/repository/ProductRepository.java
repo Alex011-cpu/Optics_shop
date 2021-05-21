@@ -9,6 +9,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Репозиторий для товаров
+ */
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findByBrandName(String brandName);

@@ -6,6 +6,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+/**
+ * Класс-сущность для товаров
+ */
 @Setter
 @Getter
 @Entity

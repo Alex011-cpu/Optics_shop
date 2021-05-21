@@ -18,23 +18,42 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 
+/**
+ * Класс-контроллер для входа в систему пользователем/выхода
+ */
 @Controller
 public class AuthController {
 
     @Autowired
     private BasketService basketService;
 
+    /**
+     * GET-запрос для страницы входа
+     * @param model
+     * @return наименование html страницы String
+     */
     @GetMapping("/auth/login")
     public String getLoginPage(Model model) {
         return "login";
     }
 
+    /**
+     * GET-запрос для страницы входа с ошибкой
+     * @param model
+     * @return наименование html страницы String
+     */
     @GetMapping("/auth/loginError")
     public String getLoginPageWithError(Model model) {
         model.addAttribute("errorMessage","Неправильная почта или пароль");
         return "login";
     }
 
+    /**
+     * GET-запрос для страницы после выхода
+     * @param request
+     * @param response
+     * @return наименование html страницы String
+     */
     @GetMapping("/auth/logout")
     public String logoutFromAc(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

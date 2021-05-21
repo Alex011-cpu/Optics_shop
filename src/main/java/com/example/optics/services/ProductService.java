@@ -9,25 +9,49 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Класс-сервис для товаров
+ */
 @Service
 public class ProductService {
 
     @Autowired
     ProductRepository productRepository;
 
+    /**
+     * Добавить товар в бд
+     * @param product
+     * @return boolean
+     */
     public boolean addProduct(Product product) {
         if (product.getBrandName().equals(findProductByBrandName(product.getBrandName()).getBrandName())) return false;
         productRepository.save(product);
         return true;
     }
 
+    /**
+     * Найти товар по бренду
+     * @param brandName
+     * @return Product
+     */
     public Product findProductByBrandName(String brandName) {
         return productRepository.findByBrandName(brandName).orElse(null);
     }
 
+    /**
+     * Найти товар по id
+     * @param id
+     * @return Product
+     */
     public Product findProductById(Long id) {
         return productRepository.findById(id).orElse(null);
     }
+
+    /**
+     * Удалить товар
+     * @param id
+     * @return boolean
+     */
     public boolean delete(Long id) {
         Product productFromDb = findProductById(id);
         if (findProductByBrandName(productFromDb.getBrandName()) == null) return false;

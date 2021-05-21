@@ -11,14 +11,20 @@ import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Класс-сервис для корзины
+ */
 @Service
 public class BasketService {
 
     @Autowired
     private BasketRepository basketRepository;
-    @Autowired
-    private ProductService productService;
 
+    /**
+     * Метод для добавления товара в корзину с учетом ограничения( не более 9 товаров)
+     * @param basket
+     * @return
+     */
     public boolean addProduct(Basket basket) {
         if (basketRepository.findByProduct_Id(basket.getProduct().getId()).isPresent()) {
             Basket basketFromDb = basketRepository.findByProduct_Id(basket.getProduct().getId()).get();
@@ -39,6 +45,11 @@ public class BasketService {
         return true;
     }
 
+    /**
+     * Метод для удаления товара из корзины
+     * @param basket
+     * @return
+     */
     public boolean delProduct(Basket basket) {
         if (basketRepository.findByProduct_Id(basket.getProduct().getId()).isPresent()) {
             Basket basketFromDb = basketRepository.findByProduct_Id(basket.getProduct().getId()).get();

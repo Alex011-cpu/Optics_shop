@@ -10,6 +10,9 @@ import org.hibernate.annotations.GeneratorType;
 import javax.persistence.*;
 import java.util.Date;
 
+/**
+ * Класс сущность для истории покупок
+ */
 @Data
 @Entity
 @Table(name = "t_history_of_orders")

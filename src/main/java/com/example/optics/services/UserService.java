@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Класс-сервис для пользователя
+ */
 @Service
 public class UserService implements UserDetailsService {
 
@@ -24,6 +27,12 @@ public class UserService implements UserDetailsService {
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    /**
+     * Загрузить пользователя по его почте
+     * @param s
+     * @return UserDetails
+     * @throws UsernameNotFoundException
+     */
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(s);
@@ -33,10 +42,20 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
+    /**
+     * Найти пользователя по его почте
+     * @param email
+     * @return User
+     */
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
+    /**
+     * Добавить пользователя в БД
+     * @param user
+     * @return boolean
+     */
     public boolean saveUser(User user) {
         User userDb = userRepository.findByEmail(user.getEmail());
 
@@ -50,6 +69,11 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
+    /**
+     * Удалить пользователя из БД
+     * @param userId
+     * @return boolean
+     */
     public boolean deleteUser(Long userId) {
         if (userRepository.findById(userId).isPresent()) {
             userRepository.deleteById(userId);
@@ -58,6 +82,11 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
+    /**
+     * Найти пользователя по id
+     * @param userId
+     * @return User
+     */
     public User findUserById(Long userId) {
         return userRepository.findById(userId).orElse(null);
     }

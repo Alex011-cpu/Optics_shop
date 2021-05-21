@@ -8,6 +8,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Репозиторий для истории покупок
+ */
 @Repository
 public interface HistoryOrdersRepository extends JpaRepository<HistoryOfOrders, Integer> {
 

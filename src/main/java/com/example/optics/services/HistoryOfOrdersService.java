@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Класс-сервис для истории покупок
+ */
 @Service
 public class HistoryOfOrdersService {
 
@@ -25,6 +28,11 @@ public class HistoryOfOrdersService {
     @Autowired
     private UserService userService;
 
+    /**
+     * Метод для добавления купленных товаров в БД
+     * @param principal
+     * @return boolean
+     */
     public boolean addBasketToHistory(Principal principal) {
         if (!basketService.findAll().isEmpty()) {
             System.out.println(basketService.findAll().size());

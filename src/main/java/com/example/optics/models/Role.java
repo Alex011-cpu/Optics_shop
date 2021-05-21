@@ -8,6 +8,9 @@ import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
 import java.util.Set;
 
+/**
+ * Класс-сущность для ролей
+ */
 @Setter
 @Getter
 @Entity
