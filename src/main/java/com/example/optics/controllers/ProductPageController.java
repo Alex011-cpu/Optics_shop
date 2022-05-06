@@ -4,12 +4,10 @@ package com.example.optics.controllers;
 import com.example.optics.models.Basket;
 import com.example.optics.services.BasketService;
 import com.example.optics.services.ProductService;
-import com.example.optics.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -24,8 +22,8 @@ public class ProductPageController {
 
     @Autowired
     private ProductService productService;
-    @Autowired
-    private UserService userService;
+    /*@Autowired
+    private UserService userService;*/
     @Autowired
     private BasketService basketService;
 
@@ -39,7 +37,7 @@ public class ProductPageController {
         model.addAttribute("BasketCount", basketService.countOfOrder());
         if (principal == null) model.addAttribute("UserObj", null);
         else {
-            model.addAttribute("UserObj", userService.loadUserByUsername(principal.getName()));
+           /*model.addAttribute("UserObj", userService.loadUserByUsername(principal.getName()));*/
         }
         model.addAttribute("BasketForm",new Basket());
         model.addAttribute("CountByCategory", productService.allProductsByCategory(category).size());

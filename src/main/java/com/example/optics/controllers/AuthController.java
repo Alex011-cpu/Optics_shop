@@ -1,82 +1,128 @@
 package com.example.optics.controllers;
 
 
-import com.example.optics.models.User;
-import com.example.optics.repository.UserRepository;
-import com.example.optics.services.BasketService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.security.Principal;
+import com.example.optics.config.jwt.JwtUtils;
+import com.example.optics.models.ERole;
+import com.example.optics.models.Role;
+import com.example.optics.models.User;
+import com.example.optics.pojo.JwtResponse;
+import com.example.optics.pojo.LoginRequest;
+import com.example.optics.pojo.MessageResponse;
+import com.example.optics.pojo.SignupRequest;
+import com.example.optics.repository.RoleRepository;
+import com.example.optics.repository.UserRepository;
+import com.example.optics.services.UserDetailsImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Класс-контроллер для входа в систему пользователем/выхода
  */
-@Controller
+@RestController
+@RequestMapping("/api/auth")
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 public class AuthController {
 
     @Autowired
-    private BasketService basketService;
+    AuthenticationManager authenticationManager;
 
-    /**
-     * GET-запрос для страницы входа
-     * @param model
-     * @return наименование html страницы String
-     */
-    @GetMapping("/auth/login")
-    public String getLoginPage(Model model) {
-        return "login";
+    @Autowired
+    UserRepository userRespository;
+
+    @Autowired
+    RoleRepository roleRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
+    JwtUtils jwtUtils;
+
+    @PostMapping("/signin")
+    public ResponseEntity<?> authUser(@RequestBody LoginRequest loginRequest) {
+
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(
+                        loginRequest.getUsername(),
+                        loginRequest.getPassword()));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);
+
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(new JwtResponse(jwt,
+                userDetails.getId(),
+                userDetails.getUsername(),
+                userDetails.getEmail(),
+                roles));
     }
 
-    /**
-     * GET-запрос для страницы входа с ошибкой
-     * @param model
-     * @return наименование html страницы String
-     */
-    @GetMapping("/auth/loginError")
-    public String getLoginPageWithError(Model model) {
-        model.addAttribute("errorMessage","Неправильная почта или пароль");
-        return "login";
-    }
+    @PostMapping("/signup")
+    public ResponseEntity<?> registerUser(@RequestBody SignupRequest signupRequest) {
 
-    /**
-     * GET-запрос для страницы после выхода
-     * @param request
-     * @param response
-     * @return наименование html страницы String
-     */
-    @GetMapping("/auth/logout")
-    public String logoutFromAc(HttpServletRequest request, HttpServletResponse response) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null) {
-            Cookie cookie = null;
-            for (Cookie c:request.getCookies()) {
-                /*Удаление куки*/
-                if (c.getName().equals("remember-me")) {
-                    c.setMaxAge(0);
-                    c.setPath("/");
-                    response.addCookie(c);
-                }
-                if (c.getName().equals("JSESSIONID")) {
-                    c.setMaxAge(0);
-                    c.setPath("/");
-                    response.addCookie(c);
-                }
-            }
-            basketService.deleteAll();
-            new SecurityContextLogoutHandler().logout(request, response, auth);
+        if (userRespository.existsByUsername(signupRequest.getUsername())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Username is exist"));
         }
 
-        return "redirect:/";
-    }
+        if (userRespository.existsByEmail(signupRequest.getEmail())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Email is exist"));
+        }
 
+        User user = new User(signupRequest.getUsername(),
+                signupRequest.getEmail(),
+                passwordEncoder.encode(signupRequest.getPassword()));
+
+        Set<String> reqRoles = signupRequest.getRoles();
+        Set<Role> roles = new HashSet<>();
+
+        if (reqRoles == null) {
+            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                    .orElseThrow(() -> new RuntimeException("Error, Role USER is not found"));
+            roles.add(userRole);
+        } else {
+            reqRoles.forEach(r -> {
+                switch (r) {
+                    case "admin":
+                        Role adminRole = roleRepository
+                                .findByName(ERole.ROLE_ADMIN)
+                                .orElseThrow(() -> new RuntimeException("Error, Role ADMIN is not found"));
+                        roles.add(adminRole);
+
+                        break;
+                    default:
+                        Role userRole = roleRepository
+                                .findByName(ERole.ROLE_USER)
+                                .orElseThrow(() -> new RuntimeException("Error, Role USER is not found"));
+                        roles.add(userRole);
+                }
+            });
+        }
+        user.setRoles(roles);
+        userRespository.save(user);
+        return ResponseEntity.ok(new MessageResponse("User CREATED"));
+    }
 }

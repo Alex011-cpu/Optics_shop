@@ -1,17 +1,7 @@
 package com.example.optics.controllers;
 
 
-import com.example.optics.models.User;
-import com.example.optics.services.BasketService;
-import com.example.optics.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.validation.Valid;
 
 /**
  * Класс-контроллер для регистрации
@@ -19,18 +9,18 @@ import javax.validation.Valid;
 @Controller
 public class RegistrationController {
 
-    @Autowired
-    private UserService userService;
+   /* @Autowired
+    private UserService userService;*/
 
     /**
      * GET-запрос для отображения страницы регистрации
      * @param user
      * @return наименование html страницы String
      */
-    @GetMapping({"/registration"})
+    /*@GetMapping({"/registration"})
     public String registration(@ModelAttribute("UserForm") User user) {
         return "registration";
-    }
+    }*/
 
     /**
      * POST-запрос на добавление пользователя в БД
@@ -40,7 +30,7 @@ public class RegistrationController {
      * @param ra
      * @return наименование html страницы String
      */
-    @PostMapping("/registration")
+    /*@PostMapping("/registration")
     public String addUser(@Valid @ModelAttribute("UserForm")  User userForm,
                           BindingResult bindingResult, Model model, RedirectAttributes ra) {
 
@@ -58,6 +48,6 @@ public class RegistrationController {
             return "registration";
         }
         return "redirect:/";
-    }
+    }*/
 
 }

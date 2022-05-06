@@ -12,63 +12,80 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 /**
  * Класс-сущность для пользователей
  */
-@Getter
-@Setter
 @Entity
-@Table(name = "t_user")
-public class User implements UserDetails {
+@Table(name = "users",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "username"),
+                @UniqueConstraint(columnNames = "email")
+        })
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Pattern(regexp = "^(.+)@(.+)$", message = "Неверный адрес электронной почты")
-    private String email;
-    @Size(min = 4, message = "Введите не меньше 3 знаков")
-    private String firstName;
-    @Size(min = 4, message = "Введите не меньше 3 знаков")
-    private String lastName;
-    @Size(min = 4, message = "Пароль должен содержать не меньше 4 знаков")
-    private String password;
-    @Transient
-    private String passwordConfirm;
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Role> roles;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoles();
+    private String username;
+    private String email;
+    private String password;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
+
+    public User() {
     }
 
-    @Override
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
         return email;
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
+    public String getPassword() {
+        return password;
     }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    @Override
-    public boolean isEnabled() {
-        return true;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 }

@@ -10,10 +10,8 @@ import java.util.Optional;
  * Репозиторий для пользователей
  */
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-
-    User findByEmail(String email);
-
-    @Override
-    <S extends User> S saveAndFlush(S s);
+public interface UserRepository extends JpaRepository<User, Long>{
+    Optional<User> findByUsername(String username);
+    Boolean existsByUsername(String username);
+    Boolean existsByEmail(String email);
 }

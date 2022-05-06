@@ -25,8 +25,8 @@ public class HistoryOfOrdersService {
     private HistoryOrdersRepository historyOrdersRepository;
     @Autowired
     private BasketService basketService;
-    @Autowired
-    private UserService userService;
+    /*@Autowired
+    private UserService userService;*/
 
     /**
      * Метод для добавления купленных товаров в БД
@@ -41,7 +41,7 @@ public class HistoryOfOrdersService {
             Date date = new Date();
             for (Basket basket : basketService.findAll()) {
                 HistoryOfOrders historyOfOrders = new HistoryOfOrders();
-                historyOfOrders.setUser(userService.findUserByEmail(principal.getName()));
+                /*historyOfOrders.setUser(userService.findUserByEmail(principal.getName()));*/
                 historyOfOrders.setProduct(basket.getProduct());
                 historyOfOrders.setCount(basket.getCount());
                 historyOfOrders.setSum(basket.getSum());

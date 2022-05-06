@@ -1,76 +1,68 @@
 package com.example.optics.config;
 
-import com.example.optics.services.UserService;
+import com.example.optics.config.jwt.AuthEntryPointJwt;
+import com.example.optics.config.jwt.AuthTokenFilter;
+import com.example.optics.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * Класс для конфигурации Spring Security
  */
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
+    @Autowired
+    UserDetailsServiceImpl userDetailsService;
 
     @Autowired
-    private UserService userService;
+    private AuthEntryPointJwt unauthorizedHandler;
 
-    /**
-     * Метод для конфигурации (разрешения для определенных ролей, включение функции запомнить меня и т.д.)
-     * @param http
-     * @throws Exception
-     */
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers("/admin/**").permitAll()
-                .antMatchers("/product/**").permitAll()
-                .antMatchers("/registration").not().authenticated()
-                .antMatchers("/fontawesome-free/**").permitAll()
-                .antMatchers("/css/**").permitAll()
-                .antMatchers("/img/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/customers/**").hasAnyRole("ADMIN","USER")
-                .antMatchers(HttpMethod.POST,"/customers/add").hasRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE,"/customers/del/**").hasRole("ADMIN")
-                .anyRequest()
-                .authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/auth/login").permitAll()
-                .failureUrl("/auth/loginError")
-                .defaultSuccessUrl("/customer",true)
-                .and()
-                .rememberMe().key("topSecret");
-
+    @Bean
+    public AuthTokenFilter authenticationJwtTokenFilter() {
+        return new AuthTokenFilter();
     }
 
-    /**
-     * Метод для шифрофания пароля
-     * @return объект класса BCryptPasswordEncoder
-     */
+    @Override
+    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    }
+
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    /**
-     * Метод для установки пользовательского сервиса и метода шифрования пароля
-     * @param auth
-     * @throws Exception
-     */
-    @Autowired
-    protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder());
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+
+        http.cors().and().csrf().disable()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .authorizeRequests()
+                .antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/api/test/**").hasRole("ADMIN")
+                .anyRequest().authenticated();
+
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+
     }
 }

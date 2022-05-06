@@ -23,7 +23,7 @@ public class BasketService {
     /**
      * Метод для добавления товара в корзину с учетом ограничения( не более 9 товаров)
      * @param basket
-     * @return
+     * @return boolean
      */
     public boolean addProduct(Basket basket) {
         if (basketRepository.findByProduct_Id(basket.getProduct().getId()).isPresent()) {
@@ -48,7 +48,7 @@ public class BasketService {
     /**
      * Метод для удаления товара из корзины
      * @param basket
-     * @return
+     * @return boolean
      */
     public boolean delProduct(Basket basket) {
         if (basketRepository.findByProduct_Id(basket.getProduct().getId()).isPresent()) {
