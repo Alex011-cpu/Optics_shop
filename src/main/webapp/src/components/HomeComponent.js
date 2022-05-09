@@ -2,10 +2,8 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {Carousel, Card, Button} from 'react-bootstrap';
 import '../resourses/css/bootstrap.min.css'
-import '../fontawesome-free/css/all.min.css'
 import styles from '../resourses/css/styles.module.scss'
 import AuthService from "../services/AuthService";
-import ProductService from "../services/ProductService";
 import BasketService from "../services/BasketService";
 
 
