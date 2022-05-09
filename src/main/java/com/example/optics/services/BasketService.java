@@ -5,6 +5,7 @@ import com.example.optics.models.Product;
 import com.example.optics.repository.BasketRepository;
 import com.example.optics.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -20,53 +21,61 @@ public class BasketService {
     @Autowired
     private BasketRepository basketRepository;
 
+    @Autowired
+    private ProductService productService;
     /**
      * Метод для добавления товара в корзину с учетом ограничения( не более 9 товаров)
-     * @param basket
+     * @param product
      * @return boolean
      */
-    public boolean addProduct(Basket basket) {
-        if (basketRepository.findByProduct_Id(basket.getProduct().getId()).isPresent()) {
-            Basket basketFromDb = basketRepository.findByProduct_Id(basket.getProduct().getId()).get();
+    public boolean addProduct(Product product) {
+
+
+        if (basketRepository.findByProduct_Id(product.getId()).isPresent()) {
+            Basket basketFromDb = basketRepository.findByProduct_Id(product.getId()).get();
             if (basketFromDb.getCount() >= 1 && countOfOrder()<9) {
-                basketFromDb.setProduct(basket.getProduct());
+                basketFromDb.setProduct(product);
                 basketFromDb.setCount(basketFromDb.getCount() + 1);
-                basketFromDb.setSum(basket.getProduct().getPrice() * basketFromDb.getCount());
+                basketFromDb.setSum(product.getPrice() * basketFromDb.getCount());
                 basketRepository.save(basketFromDb);
+                return true;
             }
-        }else if (countOfOrder() > 9) {
-            return false;
         }
         else if (countOfOrder() < 9) {
-            basket.setCount(1);
-            basket.setSum(basket.getProduct().getPrice());
-            basketRepository.save(basket);
+            Basket newBasket = new Basket();
+            newBasket.setProduct(product);
+            newBasket.setCount(1);
+            newBasket.setSum(product.getPrice());
+            basketRepository.save(newBasket);
+            return true;
         }
-        return true;
+        return false;
     }
 
     /**
      * Метод для удаления товара из корзины
-     * @param basket
+     * @param productId
      * @return boolean
      */
-    public boolean delProduct(Basket basket) {
-        if (basketRepository.findByProduct_Id(basket.getProduct().getId()).isPresent()) {
-            Basket basketFromDb = basketRepository.findByProduct_Id(basket.getProduct().getId()).get();
+    public String delProduct(Long productId) {
+
+        if (basketRepository.findByProduct_Id(productId).isPresent()) {
+            Basket basketFromDb = basketRepository.findByProduct_Id(productId).get();
+            Product productFromDb = productService.findProductById(productId);
             if (basketFromDb.getCount() > 1) {
-                basketFromDb.setProduct(basket.getProduct());
+                basketFromDb.setProduct(productFromDb);
                 basketFromDb.setCount(basketFromDb.getCount() - 1);
-                basketFromDb.setSum(basketFromDb.getSum() - basket.getProduct().getPrice());
+                basketFromDb.setSum(basketFromDb.getSum() - productFromDb.getPrice());
                 basketRepository.save(basketFromDb);
             } else if (basketFromDb.getCount() == 1) {
                 basketRepository.delete(basketFromDb);
             }
         }
-        return true;
+        return "success";
     }
 
     public List<Basket> findAll() {
-        return basketRepository.findAll();
+        return basketRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     public List<Product> findAllProductInBasket() {

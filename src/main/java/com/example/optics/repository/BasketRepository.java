@@ -2,6 +2,7 @@ package com.example.optics.repository;
 
 import com.example.optics.models.Basket;
 import com.example.optics.models.Product;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -24,7 +25,7 @@ public interface BasketRepository extends JpaRepository<Basket, Long> {
     Optional<Integer> sum();
 
     @Override
-    List<Basket> findAll();
+    List<Basket> findAll(Sort sort);
 
     @Override
     void deleteAll();

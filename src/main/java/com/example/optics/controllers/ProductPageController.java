@@ -2,160 +2,113 @@ package com.example.optics.controllers;
 
 
 import com.example.optics.models.Basket;
+import com.example.optics.models.Product;
 import com.example.optics.services.BasketService;
 import com.example.optics.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 /**
  * Класс-контроллер для отображения страниц с товарами
  */
-@Controller
+@RestController
 @RequestMapping("/product")
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 public class ProductPageController {
 
     @Autowired
     private ProductService productService;
-    /*@Autowired
-    private UserService userService;*/
+
     @Autowired
     private BasketService basketService;
 
-    /**
-     * Метод для проверки: зашел пользователь в систему или нет
-     * @param model
-     * @param principal
-     * @param category
-     */
-    public void checkUserAndSetModel(Model model, Principal principal, String category) {
-        model.addAttribute("BasketCount", basketService.countOfOrder());
-        if (principal == null) model.addAttribute("UserObj", null);
-        else {
-           /*model.addAttribute("UserObj", userService.loadUserByUsername(principal.getName()));*/
-        }
-        model.addAttribute("BasketForm",new Basket());
-        model.addAttribute("CountByCategory", productService.allProductsByCategory(category).size());
-    }
 
     /**
      * GET-запрос для получения страницы с товарами
-     * @param model
-     * @param principal
      * @param categoryName
      * @return наименование html страницы String
      */
     @GetMapping("/{categoryName}")
-    public String getProductPage(Model model, Principal principal, @PathVariable String categoryName) {
-            if (categoryName.equals("healthGlasses")) {
-            checkUserAndSetModel(model, principal, "Медицинские очки");
-            model.addAttribute("productsList", productService.allProductsByCategory("Медицинские очки"));
-            return "health_glasses";
-            } else if (categoryName.equals("sunglasses")) {
-                checkUserAndSetModel(model, principal,"Солнцезащитные очки");
-                model.addAttribute("productsList", productService.allProductsByCategory("Солнцезащитные очки"));
-                return "sunglasses";
-            } else if (categoryName.equals("contactLenses")) {
-                checkUserAndSetModel(model, principal,"Контактные линзы");
-                model.addAttribute("productsList", productService.allProductsByCategory("Контактные линзы"));
-                return "contact_lenses";
-            }
-            return "";
+    public List<Product> getProductPage(@PathVariable String categoryName) {
+
+        switch (categoryName) {
+            case "healthGlasses":
+                return productService.allProductsByCategory("Медицинские очки");
+            case "sunglasses":
+                return productService.allProductsByCategory("Солнцезащитные очки");
+            case "contactLenses":
+                return productService.allProductsByCategory("Контактные линзы");
+        }
+            return null;
+    }
+
+    @GetMapping("/count/{categoryName}")
+    public int getCountByCategory(@PathVariable String categoryName) {
+
+        switch (categoryName) {
+            case "healthGlasses":
+                return  productService.allProductsByCategory("Медицинские очки").size();
+            case "sunglasses":
+                return productService.allProductsByCategory("Солнцезащитные очки").size();
+            case "contactLenses":
+                return productService.allProductsByCategory("Контактные линзы").size();
+        }
+        return 0;
     }
 
     /**
      * GET-запрос для получения страницы с отсортированными товарами
-     * @param model
-     * @param principal
      * @param categoryName
      * @param sortMethod
      * @return наименование html страницы String
      */
     @GetMapping("/{categoryName}/{sortMethod}")
-    public String getProductPageWithSortPriceDesc(Model model, Principal principal, @PathVariable String categoryName,
+    public List<Product> getProductPageWithSortPriceDesc(@PathVariable String categoryName,
                                                   @PathVariable String sortMethod) {
         switch (sortMethod) {
             case "sort-price-desc":
                 if (categoryName.equals("healthGlasses")) {
-                    checkUserAndSetModel(model, principal, "Медицинские очки");
-                    model.addAttribute("productsList", productService
-                            .allProductsByCategoryAndSortedByPriceDesc("Медицинские очки"));
-                    return "health_glasses";
+                    return productService.allProductsByCategoryAndSortedByPriceDesc("Медицинские очки");
                 } else if (categoryName.equals("sunglasses")) {
-                    checkUserAndSetModel(model, principal, "Солнцезащитные очки");
-                    model.addAttribute("productsList", productService
-                            .allProductsByCategoryAndSortedByPriceDesc("Солнцезащитные очки"));
-                    return "sunglasses";
+                    return productService.allProductsByCategoryAndSortedByPriceDesc("Солнцезащитные очки");
                 } else if (categoryName.equals("contactLenses")) {
-                    checkUserAndSetModel(model, principal, "Контактные линзы");
-                    model.addAttribute("productsList", productService
-                            .allProductsByCategoryAndSortedByPriceDesc("Контактные линзы"));
-                    return "contact_lenses";
+                    return productService.allProductsByCategoryAndSortedByPriceDesc("Контактные линзы");
                 }
                 break;
             case "sort-price-asc":
                 if (categoryName.equals("healthGlasses")) {
-                    checkUserAndSetModel(model, principal, "Медицинские очки");
-                    model.addAttribute("productsList", productService
-                            .allProductsByCategoryAndSortedByPriceAsc("Медицинские очки"));
-                    return "health_glasses";
+                    return productService.allProductsByCategoryAndSortedByPriceAsc("Медицинские очки");
                 } else if (categoryName.equals("sunglasses")) {
-                    checkUserAndSetModel(model, principal, "Солнцезащитные очки");
-                    model.addAttribute("productsList", productService
-                            .allProductsByCategoryAndSortedByPriceAsc("Солнцезащитные очки"));
-                    return "sunglasses";
+                    return productService.allProductsByCategoryAndSortedByPriceAsc("Солнцезащитные очки");
                 } else if (categoryName.equals("contactLenses")) {
-                    checkUserAndSetModel(model, principal, "Контактные линзы");
-                    model.addAttribute("productsList", productService
-                            .allProductsByCategoryAndSortedByPriceAsc("Контактные линзы"));
-                    return "contact_lenses";
+                    return productService.allProductsByCategoryAndSortedByPriceAsc("Контактные линзы");
                 }
                 break;
             case "sort-brand-desc":
                 if (categoryName.equals("healthGlasses")) {
-                    checkUserAndSetModel(model, principal, "Медицинские очки");
-                    model.addAttribute("productsList", productService
-                            .allProductsByCategoryAndSortedByBrandDesc("Медицинские очки"));
-                    return "health_glasses";
+                    return productService.allProductsByCategoryAndSortedByBrandDesc("Медицинские очки");
                 } else if (categoryName.equals("sunglasses")) {
-                    checkUserAndSetModel(model, principal, "Солнцезащитные очки");
-                    model.addAttribute("productsList", productService
-                            .allProductsByCategoryAndSortedByBrandDesc("Солнцезащитные очки"));
-                    return "sunglasses";
+                    return productService.allProductsByCategoryAndSortedByBrandDesc("Солнцезащитные очки");
                 } else if (categoryName.equals("contactLenses")) {
-                    checkUserAndSetModel(model, principal, "Контактные линзы");
-                    model.addAttribute("productsList", productService
-                            .allProductsByCategoryAndSortedByBrandDesc("Контактные линзы"));
-                    return "contact_lenses";
+                    return productService.allProductsByCategoryAndSortedByBrandDesc("Контактные линзы");
                 }
                 break;
             case "sort-brand-asc":
                 if (categoryName.equals("healthGlasses")) {
-                    checkUserAndSetModel(model, principal, "Медицинские очки");
-                    model.addAttribute("productsList", productService
-                            .allProductsByCategoryAndSortedByBrandAsc("Медицинские очки"));
-                    return "health_glasses";
+                    return productService.allProductsByCategoryAndSortedByBrandAsc("Медицинские очки");
                 } else if (categoryName.equals("sunglasses")) {
-                    checkUserAndSetModel(model, principal, "Солнцезащитные очки");
-                    model.addAttribute("productsList", productService
-                            .allProductsByCategoryAndSortedByBrandAsc("Солнцезащитные очки"));
-                    return "sunglasses";
+                    return productService.allProductsByCategoryAndSortedByBrandAsc("Солнцезащитные очки");
                 } else if (categoryName.equals("contactLenses")) {
-                    checkUserAndSetModel(model, principal, "Контактные линзы");
-                    model.addAttribute("productsList", productService
-                            .allProductsByCategoryAndSortedByBrandAsc("Контактные линзы"));
-                    return "contact_lenses";
+                    return productService.allProductsByCategoryAndSortedByBrandAsc("Контактные линзы");
                 }
                 break;
         }
-        return "";
+        return null;
     }
-
-
 
 }

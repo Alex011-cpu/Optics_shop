@@ -3,6 +3,7 @@ package com.example.optics.services;
 
 import com.example.optics.models.Basket;
 import com.example.optics.models.HistoryOfOrders;
+import com.example.optics.models.User;
 import com.example.optics.repository.HistoryOrdersRepository;
 import com.example.optics.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,15 +26,15 @@ public class HistoryOfOrdersService {
     private HistoryOrdersRepository historyOrdersRepository;
     @Autowired
     private BasketService basketService;
-    /*@Autowired
-    private UserService userService;*/
+    @Autowired
+    private UserDetailsServiceImpl userService;
 
     /**
      * Метод для добавления купленных товаров в БД
-     * @param principal
+     * @param user
      * @return boolean
      */
-    public boolean addBasketToHistory(Principal principal) {
+    public boolean addBasketToHistory(User user) {
         if (!basketService.findAll().isEmpty()) {
             System.out.println(basketService.findAll().size());
             List<HistoryOfOrders> historyOfOrdersList = new ArrayList<>();
@@ -41,7 +42,7 @@ public class HistoryOfOrdersService {
             Date date = new Date();
             for (Basket basket : basketService.findAll()) {
                 HistoryOfOrders historyOfOrders = new HistoryOfOrders();
-                /*historyOfOrders.setUser(userService.findUserByEmail(principal.getName()));*/
+                historyOfOrders.setUser(userService.getUserByUsername(user.getUsername()));
                 historyOfOrders.setProduct(basket.getProduct());
                 historyOfOrders.setCount(basket.getCount());
                 historyOfOrders.setSum(basket.getSum());
@@ -57,6 +58,7 @@ public class HistoryOfOrdersService {
     }
 
     public List<HistoryOfOrders> findAllByUserId(Long id) {
+        List<HistoryOfOrders> data = historyOrdersRepository.findAllByUserId(id);
         return historyOrdersRepository.findAllByUserId(id);
     }
 
