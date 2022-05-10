@@ -1,7 +1,7 @@
 import AuthService from "./AuthService";
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/history/";
+const API_URL = "/history/";
 const TOKEN = AuthService.authHeader()
 
 class HistoryService {

@@ -2,7 +2,7 @@ import axios from "axios";
 import AuthService from "./AuthService";
 
 
-const API_URL = "http://localhost:8080/basket/";
+const API_URL = "/basket/";
 const TOKEN = AuthService.authHeader()
 
 class BasketService {

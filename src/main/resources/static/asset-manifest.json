@@ -1,0 +1,42 @@
+{
+  "files": {
+    "main.css": "/static/css/main.b19b44c5.css",
+    "main.js": "/static/js/main.dc12ea6a.js",
+    "static/js/787.fb395d77.chunk.js": "/static/js/787.fb395d77.chunk.js",
+    "static/media/add1.png": "/static/media/add1.54cfd9412a968a174e8f.png",
+    "static/media/Victoria.jpg": "/static/media/Victoria.d1a9b1eaeb648f94efbc.jpg",
+    "static/media/Vogue.jpg": "/static/media/Vogue.7532fd62c51baf8fafe7.jpg",
+    "static/media/Solaris.jpg": "/static/media/Solaris.606460ecf47044404ac1.jpg",
+    "static/media/add2.png": "/static/media/add2.a4744fd98a2cf7396e26.png",
+    "static/media/add3.png": "/static/media/add3.4e7926c66a5e4f3fec58.png",
+    "static/media/Cooper.jpg": "/static/media/Cooper.9a9ca85d096b7146f9c4.jpg",
+    "static/media/iWear2.jpg": "/static/media/iWear2.653bde3a69a303d9e068.jpg",
+    "static/media/Cooper2.jpg": "/static/media/Cooper2.d1ebc8e37508f54554a8.jpg",
+    "static/media/Alcon.jpg": "/static/media/Alcon.4d5a8a4400356eae6d45.jpg",
+    "static/media/JJ.jpg": "/static/media/JJ.4ed72bf39010461a7cb8.jpg",
+    "static/media/Armani.jpg": "/static/media/Armani.cd4aca18fc69a0a80eae.jpg",
+    "static/media/iWear Oxygen 6.jpg": "/static/media/iWear Oxygen 6.dce3da99611dd5afe0e2.jpg",
+    "static/media/Mochino.jpg": "/static/media/Mochino.99924d831d61773c33aa.jpg",
+    "service-worker.js": "/service-worker.js",
+    "static/media/Polaroid.png": "/static/media/Polaroid.10157a44b80e8a730285.png",
+    "static/media/pinkGlasses.jpg": "/static/media/pinkGlasses.a4469b2edca49060dc8e.jpg",
+    "static/media/JJ2.jpg": "/static/media/JJ2.5e9cf4468a785d04ea17.jpg",
+    "static/media/MarcJacobs.jpg": "/static/media/MarcJacobs.17d01f89845174d17f48.jpg",
+    "static/media/glasses.png": "/static/media/glasses.3a58c15020d469243a02.png",
+    "static/media/5thAvenue.jpg": "/static/media/5thAvenue.e6b880efa0899d2f3ec6.jpg",
+    "static/media/Unofficial.jpg": "/static/media/Unofficial.9b8b469bc6544adabb42.jpg",
+    "static/media/Cline.jpg": "/static/media/Cline.97b944fe20b12e0169b6.jpg",
+    "static/media/Julius.jpg": "/static/media/Julius.37455fc2302cce08eed1.jpg",
+    "static/media/Heritage.jpg": "/static/media/Heritage.62bd03db46525d88472d.jpg",
+    "static/media/add.png": "/static/media/add.f094b8d4c0f1f251e614.png",
+    "static/media/success.png": "/static/media/success.2a4852de4bf488c999b4.png",
+    "index.html": "/index.html",
+    "main.b19b44c5.css.map": "/static/css/main.b19b44c5.css.map",
+    "main.dc12ea6a.js.map": "/static/js/main.dc12ea6a.js.map",
+    "787.fb395d77.chunk.js.map": "/static/js/787.fb395d77.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b19b44c5.css",
+    "static/js/main.dc12ea6a.js"
+  ]
+}

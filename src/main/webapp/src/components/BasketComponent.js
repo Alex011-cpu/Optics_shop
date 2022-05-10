@@ -102,9 +102,9 @@ const BasketComponent = () => {
                                 <Link to="/">МАГАЗИН ОПТИКИ</Link>
                             </div>
                             <ul className={styles.nav2}>
-                                <li><Link to="/product/healthGlasses" onClick={window.location.reload}>МЕДИЦИНСКИЕ ОЧКИ</Link></li>
-                                <li><Link to="/product/sunglasses" onClick={window.location.reload}>СОЛНЦЕЗАЩИТНЫЕ ОЧКИ</Link></li>
-                                <li><Link to="/product/contactLenses" onClick={window.location.reload}>КОНТАКТНЫЕ ЛИНЗЫ</Link></li>
+                                <li><Link to="/product/healthGlasses">МЕДИЦИНСКИЕ ОЧКИ</Link></li>
+                                <li><Link to="/product/sunglasses">СОЛНЦЕЗАЩИТНЫЕ ОЧКИ</Link></li>
+                                <li><Link to="/product/contactLenses">КОНТАКТНЫЕ ЛИНЗЫ</Link></li>
                             </ul>
                         </div>
                     </div>

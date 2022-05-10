@@ -7,7 +7,7 @@ import {Button, Card} from "react-bootstrap";
 import BasketService from "../services/BasketService";
 
 
-const ProductPageComponent = (props) => {
+const ContactLensesComponent = (props) => {
 
     let [currentUser, setCurrentUser] = useState({userDet: {}, userReady: false})
     let [products, setCurrentProduct] = useState( {productsList: [], productCount: 0})
@@ -99,7 +99,7 @@ const ProductPageComponent = (props) => {
                                 (<ul className={styles.nav1}>
                                     <li><Link to="/auth/login">0 товаров</Link></li>
                                     <li><Link to="/auth/login">Войти</Link></li>
-                                    <li className="reg"><a href="/auth/registration">Регистрация</a></li>
+                                    <li className="reg"><li className="reg"><Link to="/auth/registration">Регистрация</Link></li></li>
                                 </ul>)
                         }
                     </div>
@@ -112,9 +112,9 @@ const ProductPageComponent = (props) => {
                             <Link to="/">МАГАЗИН ОПТИКИ</Link>
                         </div>
                         <ul className={styles.nav2}>
-                            <li><Link to="/product/healthGlasses" onClick={window.location.reload}>МЕДИЦИНСКИЕ ОЧКИ</Link></li>
-                            <li><Link to="/product/sunglasses" onClick={window.location.reload}>СОЛНЦЕЗАЩИТНЫЕ ОЧКИ</Link></li>
-                            <li><Link to="/product/contactLenses" onClick={window.location.reload}>КОНТАКТНЫЕ ЛИНЗЫ</Link></li>
+                            <li><Link to="/product/healthGlasses">МЕДИЦИНСКИЕ ОЧКИ</Link></li>
+                            <li><Link to="/product/sunglasses">СОЛНЦЕЗАЩИТНЫЕ ОЧКИ</Link></li>
+                            <li><Link to="/product/contactLenses">КОНТАКТНЫЕ ЛИНЗЫ</Link></li>
                         </ul>
                     </div>
                 </div>
@@ -140,7 +140,7 @@ const ProductPageComponent = (props) => {
                     {
                         (Array.isArray(sortedProducts.sortedProductsList))? (
                                 sortedProducts.sortedProductsList.map(product =>
-                                    <Card style={{ width: '18rem',marginBottom:'10px' }}>
+                                    <Card className={styles.card} style={{ width: '18rem'}}>
                                         <Card.Img style={{height: '16vh'}} variant="top" src={require("../resourses" + product.path)} />
                                         <Card.Body>
                                             <Card.Title>{product.category}</Card.Title>
@@ -152,7 +152,7 @@ const ProductPageComponent = (props) => {
                                     </Card>)
                             ) :
                             (products.productsList.map(product =>
-                                    <Card style={{ width: '18rem',marginBottom:'10px' }}>
+                                    <Card className={styles.card} style={{ width: '18rem'}}>
                                         <Card.Img style={{height: '16vh'}} variant="top" src={require("../resourses" + product.path)} />
                                         <Card.Body>
                                             <Card.Title>{product.category}</Card.Title>
@@ -191,4 +191,4 @@ const ProductPageComponent = (props) => {
     );
 };
 
-export default ProductPageComponent;
+export default ContactLensesComponent;

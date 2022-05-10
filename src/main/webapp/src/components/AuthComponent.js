@@ -4,7 +4,6 @@ import styles from '../resourses/css/login.module.scss';
 import AuthService from "../services/AuthService";
 import { useNavigate } from 'react-router-dom';
 
-const baseURL = "http://localhost:8080/user?email=newuser@mail.ru";
 
 export default function AuthComponent(props){
 
