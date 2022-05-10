@@ -57,7 +57,7 @@ class HomeComponent extends Component {
                                     (<ul className={styles.nav1}>
                                         <li><Link to="/auth/login">0 товаров</Link></li>
                                         <li><Link to="/auth/login">Войти</Link></li>
-                                        <li className="reg"><li className="reg"><Link to="/auth/registration">Регистрация</Link></li></li>
+                                        <li className="reg"><Link to="/auth/registration">Регистрация</Link></li>
                                     </ul>)
                             }
                         </div>

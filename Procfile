@@ -1,1 +1,0 @@
-web: java -jar target/optics-0.0.1-SNAPSHOT.jar

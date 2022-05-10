@@ -99,7 +99,7 @@ const ContactLensesComponent = (props) => {
                                 (<ul className={styles.nav1}>
                                     <li><Link to="/auth/login">0 товаров</Link></li>
                                     <li><Link to="/auth/login">Войти</Link></li>
-                                    <li className="reg"><li className="reg"><Link to="/auth/registration">Регистрация</Link></li></li>
+                                    <li className="reg"><Link to="/auth/registration">Регистрация</Link></li>
                                 </ul>)
                         }
                     </div>
@@ -140,7 +140,7 @@ const ContactLensesComponent = (props) => {
                     {
                         (Array.isArray(sortedProducts.sortedProductsList))? (
                                 sortedProducts.sortedProductsList.map(product =>
-                                    <Card className={styles.card} style={{ width: '18rem'}}>
+                                    <Card className={styles.card} style={{ width: '18rem', marginBottom:'10px'}}>
                                         <Card.Img style={{height: '16vh'}} variant="top" src={require("../resourses" + product.path)} />
                                         <Card.Body>
                                             <Card.Title>{product.category}</Card.Title>
@@ -152,7 +152,7 @@ const ContactLensesComponent = (props) => {
                                     </Card>)
                             ) :
                             (products.productsList.map(product =>
-                                    <Card className={styles.card} style={{ width: '18rem'}}>
+                                    <Card className={styles.card} style={{ width: '18rem', marginBottom:'10px'}}>
                                         <Card.Img style={{height: '16vh'}} variant="top" src={require("../resourses" + product.path)} />
                                         <Card.Body>
                                             <Card.Title>{product.category}</Card.Title>
