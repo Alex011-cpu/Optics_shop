@@ -109,7 +109,7 @@ const SunGlassesComponent = (props) => {
                 <div className={styles.wrapper}>
                     <div className={styles.header_body}>
                         <div className="logo">
-                            <Link to="/">МАГАЗИН ОПТИКИ</Link>
+                            <Link to="/">WonderOptic</Link>
                         </div>
                         <ul className={styles.nav2}>
                             <li><Link to="/product/healthGlasses">МЕДИЦИНСКИЕ ОЧКИ</Link></li>

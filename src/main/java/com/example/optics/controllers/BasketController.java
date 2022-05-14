@@ -32,8 +32,6 @@ public class BasketController {
         return "error";
     }
 
-
-
     @DeleteMapping("/delete/{productId}")
     public String deleteFromBasket(@PathVariable Long productId) {
         return basketService.delProduct(productId);

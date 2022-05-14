@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import {Link, Navigate} from 'react-router-dom';
+import React, {useState } from 'react';
+import {Link} from 'react-router-dom';
 import styles from '../resourses/css/login.module.scss';
 import { useNavigate } from 'react-router-dom';
 import AuthService from "../services/AuthService";

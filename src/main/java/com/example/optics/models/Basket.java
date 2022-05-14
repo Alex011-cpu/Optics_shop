@@ -19,12 +19,12 @@ import java.util.List;
 public class Basket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    private long id;
     @OneToOne
     @JoinColumn(name = "product_id")
-    Product product;
+    private Product product;
     @Column(name = "count")
-    int count;
+    private int count;
     @Column(name = "sum")
-    int sum;
+    private int sum;
 }

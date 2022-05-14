@@ -29,7 +29,7 @@ public class HistoryOfOrders {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")
     private Product product;
-    int count;
-    int sum;
+    private int count;
+    private int sum;
     private String creationDate;
 }
